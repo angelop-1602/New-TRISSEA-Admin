@@ -15,5 +15,5 @@ export default async function Page() {
   if (!response.ok) {
     redirect('/sign-in');
   }
-  redirect('/dashboard');
+  redirect('/dashboard/overview');
 }
