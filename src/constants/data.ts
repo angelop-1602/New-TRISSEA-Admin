@@ -23,7 +23,7 @@ export const navItems: NavItem[] = [
   },
   {
     title: 'Drivers',
-    url: '/dashboard/',
+    url: '/dashboard/drivers',
     icon: 'wheel',
     isActive: false,
     shortcut: ['d', 'd'],
@@ -31,7 +31,7 @@ export const navItems: NavItem[] = [
   },
   {
     title: 'Passengers',
-    url: '/dashboard/',
+    url: '/dashboard/passengers',
     icon: 'userg',
     isActive: false,
     shortcut: ['d', 'd'],
@@ -39,7 +39,7 @@ export const navItems: NavItem[] = [
   },
   {
     title: 'TODA',
-    url: '/dashboard/',
+    url: '/dashboard/toda',
     icon: 'routex',
     isActive: false,
     shortcut: ['d', 'd'],
@@ -47,7 +47,7 @@ export const navItems: NavItem[] = [
   },
   {
     title: 'Registered Drivers',
-    url: '/dashboard/',
+    url: '/dashboard/registered-drivers',
     icon: 'checked',
     isActive: false,
     shortcut: ['d', 'd'],

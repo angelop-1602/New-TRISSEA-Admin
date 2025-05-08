@@ -6,7 +6,7 @@ import Header from '@/components/layout/header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { useAdmin } from '@/hooks/use-admin';
 import ProfileCreateForm from '@/features/profile/components/profile-create-form';
-import DashboardLoading from '@/components/layout/loading';
+import Loading from '@/components/layout/loading';
 
 export default function DashboardLayout({
   children
@@ -16,7 +16,7 @@ export default function DashboardLayout({
   const { loading, needsProfile } = useAdmin();
 
   if (loading) {
-    return <DashboardLoading />;
+    return <Loading variant="dashboard" />;
   }
 
   if (needsProfile) {

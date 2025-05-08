@@ -1,3 +1,4 @@
+'use client';
 import PageContainer from '@/components/layout/page-container';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -8,9 +9,11 @@ import {
   CardAction,
   CardFooter
 } from '@/components/ui/card';
+import { Icons } from '@/components/icons';
 import { IconTrendingDown, IconTrendingUp } from '@tabler/icons-react';
-import React from 'react';
-import TodayDate from '@/components/ui/time-today'
+import React, { useState } from 'react';
+import TodayDate from '@/components/ui/date-today';
+import { Button } from '@/components/ui/button';
 
 export default function OverViewLayout({
   sales,
@@ -22,9 +25,9 @@ export default function OverViewLayout({
   pie_stats: React.ReactNode;
   bar_stats: React.ReactNode;
   area_stats: React.ReactNode;
-})
+}) {
+  const [hideRevenue, setHideRevenue] = useState(false);
 
-{
   return (
     <PageContainer>
       <div className='flex flex-1 flex-col space-y-2'>
@@ -37,9 +40,28 @@ export default function OverViewLayout({
         <div className='*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs md:grid-cols-2 lg:grid-cols-4'>
           <Card className='@container/card'>
             <CardHeader>
-              <CardDescription>Total Revenue</CardDescription>
-              <CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
-                ₱1,250.00
+              <div className='flex items-center justify-between'>
+                <CardDescription>Total Revenue</CardDescription>
+              </div>
+              <CardTitle className='@[250px]/card:text-3xl'>
+                <div className='flex items-center gap-2'>
+                  <span className='text-2xl font-semibold tabular-nums'>
+                    {hideRevenue ? '********' : '₱10,002,250.00'}
+                  </span>
+                  <Button
+                    variant='outline'
+                    size='sm'
+                    onClick={() => setHideRevenue(!hideRevenue)}
+                    className='border-primary/40 hover:border-primary flex h-8 w-8 items-center justify-center p-1'
+                    title={hideRevenue ? 'Show revenue' : 'Hide revenue'}
+                  >
+                    {hideRevenue ? (
+                      <Icons.eyeOff className='text-muted-foreground h-5 w-5' />
+                    ) : (
+                      <Icons.eye className='text-primary h-5 w-5' />
+                    )}
+                  </Button>
+                </div>
               </CardTitle>
               <CardAction>
                 <Badge variant='outline'>
@@ -59,16 +81,20 @@ export default function OverViewLayout({
           </Card>
           <Card className='@container/card'>
             <CardHeader>
-              <CardDescription>Today Trips <TodayDate/></CardDescription>
+              <CardDescription className='flex items-center gap-1.5'>
+                <span>Today Trips</span>
+              </CardDescription>
               <CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
                 234
               </CardTitle>
               <CardAction>
                 <Badge variant='outline'>
-                  Total: 20,304
+                  <Icons.calendar className='h-5 w-5' />
+                  <TodayDate />
                 </Badge>
               </CardAction>
             </CardHeader>
+
             <CardFooter className='flex-col items-start gap-1.5 text-sm'>
               <div className='line-clamp-1 flex gap-2 font-medium'>
                 Down 20% this period <IconTrendingDown className='size-4' />
@@ -78,9 +104,10 @@ export default function OverViewLayout({
               </div>
             </CardFooter>
           </Card>
+
           <Card className='@container/card'>
             <CardHeader>
-              <CardDescription>Active Accounts</CardDescription>
+              <CardDescription>Active Drivers</CardDescription>
               <CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
                 45,678
               </CardTitle>
@@ -93,18 +120,16 @@ export default function OverViewLayout({
             </CardHeader>
             <CardFooter className='flex-col items-start gap-1.5 text-sm'>
               <div className='line-clamp-1 flex gap-2 font-medium'>
-                Strong user retention <IconTrendingUp className='size-4' />
+                Active drivers <IconTrendingUp className='size-4' />
               </div>
-              <div className='text-muted-foreground'>
-                Engagement exceed targets
-              </div>
+              <div className='text-muted-foreground'>Drivers are active</div>
             </CardFooter>
           </Card>
           <Card className='@container/card'>
             <CardHeader>
-              <CardDescription>Growth Rate</CardDescription>
+              <CardDescription>Total Trips</CardDescription>
               <CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
-                4.5%
+                10,021
               </CardTitle>
               <CardAction>
                 <Badge variant='outline'>
