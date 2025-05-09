@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export function BarGraphSkeleton() {
+export function TripPerformanceSkeleton() {
   return (
     <Card>
       <CardHeader className='flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row'>
@@ -23,7 +23,7 @@ export function BarGraphSkeleton() {
       </CardHeader>
       <CardContent className='px-2 sm:p-6'>
         {/* Bar-like shapes */}
-        <div className='flex aspect-auto h-[280px] w-full items-end justify-around gap-2 pt-8'>
+        <div className='flex aspect-auto h-[250px] w-full items-end justify-around gap-2 pt-8'>
           {Array.from({ length: 12 }).map((_, i) => (
             <Skeleton
               key={i}
@@ -37,4 +37,4 @@ export function BarGraphSkeleton() {
       </CardContent>
     </Card>
   );
-}
+} 

@@ -24,6 +24,7 @@ import {
   ChartTooltip,
   ChartTooltipContent
 } from '@/components/ui/chart';
+import { IconChartBar } from '@tabler/icons-react';
 
 export const description = 'An interactive bar chart with date range filtering';
 
@@ -85,7 +86,7 @@ const chartConfig = {
   }
 } satisfies ChartConfig;
 
-export function BarGraph() {
+export function TripPerformance() {
   const [activeChart, setActiveChart] = 
     React.useState<keyof typeof chartConfig>('completed');
   
@@ -194,12 +195,15 @@ export function BarGraph() {
   }
 
   return (
-    <Card className='@container/card !pt-3'>
+    <Card className='@container/card'>
       <CardHeader className='flex flex-col space-y-0 border-b !p-0 sm:flex-row'>
         <div className='flex flex-1 flex-col justify-center gap-1 px-6 py-4'>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Tricycle Trips</CardTitle>
+              <CardTitle className="flex items-center">
+                <IconChartBar className="h-6 w-6 mr-2 text-muted-foreground" />
+                Trip Performance
+              </CardTitle>
               <CardDescription>
                 <span>
                   {dateRangeText}
@@ -367,4 +371,4 @@ export function BarGraph() {
       </CardContent>
     </Card>
   );
-}
+} 

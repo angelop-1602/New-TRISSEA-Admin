@@ -11,29 +11,44 @@ import {
 } from '@/components/ui/card';
 import { Icons } from '@/components/icons';
 import { IconTrendingDown, IconTrendingUp } from '@tabler/icons-react';
-import React, { useState } from 'react';
-import TodayDate from '@/components/ui/date-today';
+import React, { useState, useEffect } from 'react';
+import TodayDate from '@/components/ui/time-today';
 import { Button } from '@/components/ui/button';
 
 export default function OverViewLayout({
-  sales,
-  pie_stats,
-  bar_stats,
-  area_stats
+  current_trips,
+  pickup_zone,
+  trip_performance,
+  area_stats,
+  incident_reports
 }: {
-  sales: React.ReactNode;
-  pie_stats: React.ReactNode;
-  bar_stats: React.ReactNode;
+  current_trips: React.ReactNode;
+  pickup_zone: React.ReactNode;
+  trip_performance: React.ReactNode;
   area_stats: React.ReactNode;
+  incident_reports: React.ReactNode;
 }) {
   const [hideRevenue, setHideRevenue] = useState(false);
+  const [isFirstVisit, setIsFirstVisit] = useState(true);
+
+  useEffect(() => {
+    // Check if user has visited before using localStorage
+    const hasVisitedBefore = localStorage.getItem('hasVisitedDashboard');
+    if (hasVisitedBefore) {
+      setIsFirstVisit(false);
+    } else {
+      // Set flag in localStorage for future visits
+      localStorage.setItem('hasVisitedDashboard', 'true');
+      setIsFirstVisit(true);
+    }
+  }, []);
 
   return (
     <PageContainer>
       <div className='flex flex-1 flex-col space-y-2'>
         <div className='flex items-center justify-between space-y-2'>
           <h2 className='text-2xl font-bold tracking-tight'>
-            Hi, Welcome back 👋
+            {isFirstVisit ? 'Hi, Welcome Admin👋' : 'Hi, Welcome back Admin👋'}
           </h2>
         </div>
 
@@ -150,13 +165,10 @@ export default function OverViewLayout({
           </Card>
         </div>
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-7'>
-          <div className='col-span-4'>{bar_stats}</div>
-          <div className='col-span-4 md:col-span-3'>
-            {/* sales arallel routes */}
-            {sales}
-          </div>
-          <div className='col-span-4'>{area_stats}</div>
-          <div className='col-span-4 md:col-span-3'>{pie_stats}</div>
+          <div className='col-span-4'>{trip_performance}</div>
+          <div className='col-span-4 md:col-span-3'>{pickup_zone}</div>
+          <div className='col-span-4'>{current_trips}</div>
+          <div className='col-span-4 md:col-span-3'>{incident_reports}</div>
         </div>
       </div>
     </PageContainer>

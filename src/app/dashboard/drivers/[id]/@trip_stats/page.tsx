@@ -1,6 +1,6 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Icons } from '@/components/icons';
-import TodayDate from '@/components/ui/date-today'
+import TodayDate from '@/components/ui/time-today'
 import { drivers } from '@/features/drivers/data';
 
 // Dummy data for the trips
