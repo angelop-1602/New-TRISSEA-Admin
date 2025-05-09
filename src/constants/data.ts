@@ -22,37 +22,45 @@ export const navItems: NavItem[] = [
     items: [] // Empty array as there are no child items for Dashboard
   },
   {
-    title: 'Drivers',
+    title: 'Drivers Management',
     url: '/dashboard/drivers',
     icon: 'wheel',
     isActive: false,
-    shortcut: ['d', 'd'],
-    items: [] // Empty array as there are no child items for Dashboard
+    shortcut: ['d', 'r'],
+    items: [
+      {
+        title: 'Verified Drivers',
+        url: '/dashboard/drivers',
+        shortcut: ['d', 'a']
+      },
+      {
+        title: 'Driver Verification',
+        url: '/dashboard/drivers/verification',
+        shortcut: ['d', 'v']
+      },
+      {
+        title: 'Driver Database',
+        url: '/dashboard/drivers/database',
+        shortcut: ['d', 'd']
+      }
+    ]
   },
   {
-    title: 'Passengers',
+    title: 'Passengers Management',
     url: '/dashboard/passengers',
     icon: 'userg',
     isActive: false,
-    shortcut: ['d', 'd'],
+    shortcut: ['p', 'm'],
     items: [] // Empty array as there are no child items for Dashboard
   },
   {
-    title: 'TODA',
+    title: 'TODA Management',
     url: '/dashboard/toda',
     icon: 'routex',
     isActive: false,
-    shortcut: ['d', 'd'],
+    shortcut: ['t', 'm'],
     items: [] // Empty array as there are no child items for Dashboard
-  },
-  {
-    title: 'Registered Drivers',
-    url: '/dashboard/registered-drivers',
-    icon: 'checked',
-    isActive: false,
-    shortcut: ['d', 'd'],
-    items: [] // Empty array as there are no child items for Dashboard
-  },
+  }
 ];
 
 export interface SaleUser {

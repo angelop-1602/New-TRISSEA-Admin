@@ -22,8 +22,7 @@ import {
 } from '@/components/ui/pagination';
 import { Icons } from '@/components/icons';
 import { format, addMinutes } from 'date-fns';
-import { getDriverById } from '@/features/shared/data/drivers';
-import React from 'react';
+import { passengers } from '@/features/passengers/data';
 
 // Define trip type for better type safety
 interface Trip {
@@ -34,8 +33,8 @@ interface Trip {
   pickupTime: Date;
   dropoffTime?: Date;
   cancelTime?: Date;
-  passengerName: string;
-  passengerPhone: string;
+  driverName: string;
+  driverPhone: string;
   fare: number;
   distance: string;
   estimatedTime: string;
@@ -43,85 +42,83 @@ interface Trip {
   cancelReason?: string;
 }
 
-export default function RecentTrips() {
+export default function PassengerRecentTrips() {
   const params = useParams();
-  const driverId = params.id as string;
-  const driver = getDriverById(driverId);
+  const passengerId = params.id as string;
+  const passenger = passengers.find(p => p.id === passengerId);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
-  
-  if (!driver) {
-    return null;
-  }
 
-  // Dummy data for current/recent trips
+  if (!passenger) return null;
+
+  // Sample trips data for demonstration
   const recentTrips: Trip[] = [
     {
       id: 'T1001',
       status: 'In Progress',
-      pickupLocation: 'SM City Tuguegarao',
-      dropoffLocation: 'Cagayan State University',
-      pickupTime: new Date(Date.now() - 15 * 60 * 1000), // 15 minutes ago
-      passengerName: 'Maria Santos',
-      passengerPhone: '+63 912 345 6789',
-      fare: 120.00,
-      distance: '3.2 km',
-      estimatedTime: '12 min'
+      pickupLocation: 'SM City Makati',
+      dropoffLocation: 'Bonifacio Global City',
+      pickupTime: new Date(Date.now() - 20 * 60 * 1000), // 20 minutes ago
+      driverName: 'John Doe',
+      driverPhone: '+63 912 345 6789',
+      fare: 180.00,
+      distance: '4.5 km',
+      estimatedTime: '15 min'
     },
     {
       id: 'T1000',
       status: 'Completed',
-      pickupLocation: 'Robinsons Place Tuguegarao',
-      dropoffLocation: 'Metro Tuguegarao',
+      pickupLocation: 'Glorietta Mall',
+      dropoffLocation: 'Rockwell Center',
       pickupTime: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
-      dropoffTime: new Date(Date.now() - 1 * 60 * 60 * 50 * 1000), // 1 hour 50 minutes ago
-      passengerName: 'Juan Cruz',
-      passengerPhone: '+63 923 456 7890',
-      fare: 85.00,
-      distance: '2.1 km',
-      estimatedTime: '8 min',
+      dropoffTime: new Date(Date.now() - 1 * 60 * 60 * 45 * 1000), // 1 hour 45 minutes ago
+      driverName: 'Mike Johnson',
+      driverPhone: '+63 923 456 7890',
+      fare: 120.00,
+      distance: '3.2 km',
+      estimatedTime: '12 min',
       rating: 5
     },
     {
       id: 'T999',
       status: 'Cancelled',
-      pickupLocation: 'Tuguegarao City Hall',
-      dropoffLocation: 'Tuguegarao Airport',
+      pickupLocation: 'Greenbelt Mall',
+      dropoffLocation: 'Ayala Museum',
       pickupTime: new Date(Date.now() - 5 * 60 * 60 * 1000), // 5 hours ago
-      cancelTime: new Date(Date.now() - 4 * 60 * 60 * 55 * 1000), // 4 hours 55 minutes ago
-      passengerName: 'Pedro Reyes',
-      passengerPhone: '+63 934 567 8901',
-      fare: 150.00,
-      distance: '4.5 km',
-      estimatedTime: '15 min',
+      cancelTime: new Date(Date.now() - 5 * 60 * 60 * 1000 + 3 * 60 * 1000), // 5 hours ago + 3 minutes
+      driverName: 'Sarah Wilson',
+      driverPhone: '+63 934 567 8901',
+      fare: 90.00,
+      distance: '2.5 km',
+      estimatedTime: '10 min',
       cancelReason: 'Passenger requested cancellation'
     },
     {
       id: 'T998',
       status: 'Completed',
-      pickupLocation: 'Tuguegarao Public Market',
-      dropoffLocation: 'SM Tuguegarao',
+      pickupLocation: 'Mall of Asia',
+      dropoffLocation: 'Makati CBD',
       pickupTime: new Date(Date.now() - 8 * 60 * 60 * 1000), // 8 hours ago
-      dropoffTime: new Date(Date.now() - 7 * 60 * 60 * 40 * 1000), // 7 hours 40 minutes ago
-      passengerName: 'Sofia Garcia',
-      passengerPhone: '+63 945 678 9012',
-      fare: 95.00,
-      distance: '2.8 km',
-      estimatedTime: '10 min',
+      dropoffTime: new Date(Date.now() - 7 * 60 * 60 * 30 * 1000), // 7 hours 30 minutes ago
+      driverName: 'Robert Chen',
+      driverPhone: '+63 945 678 9012',
+      fare: 250.00,
+      distance: '7.8 km',
+      estimatedTime: '25 min',
       rating: 4
     },
     {
       id: 'T997',
       status: 'Completed',
-      pickupLocation: 'Tuguegarao Convention Center',
-      dropoffLocation: 'Tuguegarao Peoples Gymnasium',
+      pickupLocation: 'Trinoma Mall',
+      dropoffLocation: 'UP Diliman',
       pickupTime: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
-      dropoffTime: new Date(Date.now() - 24 * 60 * 60 * 1000 + 20 * 60 * 1000), // 1 day ago + 20 minutes
-      passengerName: 'Miguel Torres',
-      passengerPhone: '+63 956 789 0123',
-      fare: 75.00,
-      distance: '1.8 km',
-      estimatedTime: '7 min',
+      dropoffTime: new Date(Date.now() - 24 * 60 * 60 * 1000 + 25 * 60 * 1000), // 1 day ago + 25 minutes
+      driverName: 'Alicia Reyes',
+      driverPhone: '+63 956 789 0123',
+      fare: 130.00,
+      distance: '3.5 km',
+      estimatedTime: '12 min',
       rating: 5
     }
   ];
@@ -133,7 +130,7 @@ export default function RecentTrips() {
   const totalPages = Math.ceil(recentTrips.length / itemsPerPage);
 
   // Helper function to get appropriate dropoff time display
-  const getDropoffTimeDisplay = (trip: Trip): string => {
+  const getDropoffTimeDisplay = (trip: Trip) => {
     if (trip.status === 'Completed' && trip.dropoffTime) {
       return format(trip.dropoffTime, 'h:mm a');
     } else if (trip.status === 'Cancelled' && trip.cancelTime) {
@@ -209,11 +206,11 @@ export default function RecentTrips() {
                   
                   <div className="space-y-3">
                     <div className="flex items-start gap-2">
-                      <div className="w-5 mt-0.5"><Icons.phone className="h-4 w-4 text-muted-foreground" /></div>
+                      <div className="w-5 mt-0.5"><Icons.car className="h-4 w-4 text-muted-foreground" /></div>
                       <div>
-                        <div className="text-xs text-muted-foreground">Passenger</div>
-                        <div className="text-sm">{trip.passengerName}</div>
-                        <div className="text-xs text-muted-foreground">{trip.passengerPhone}</div>
+                        <div className="text-xs text-muted-foreground">Driver</div>
+                        <div className="text-sm">{trip.driverName}</div>
+                        <div className="text-xs text-muted-foreground">{trip.driverPhone}</div>
                       </div>
                     </div>
                     <div className="flex items-start gap-2">
@@ -247,7 +244,7 @@ export default function RecentTrips() {
                 
                 {trip.status === 'In Progress' && (
                   <div className="mt-3 pt-3 border-t flex justify-end">
-                    <Button size="sm" variant="outline">View Live Trip</Button>
+                    <Button size="sm" variant="outline">Track Trip</Button>
                   </div>
                 )}
               </AccordionContent>

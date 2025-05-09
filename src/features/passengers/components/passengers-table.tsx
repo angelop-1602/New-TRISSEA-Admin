@@ -15,8 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuCheckboxItem
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { 
@@ -24,13 +23,11 @@ import {
   IconEdit, 
   IconTrash, 
   IconSearch,
-  IconFilter,
   IconEye,
-  IconCar
+  IconUser
 } from '@tabler/icons-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -39,39 +36,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DriverStatus, VehicleType } from '../types';
+import { Passenger, PassengerStatus } from '../types';
 import Link from 'next/link';
-import { getAllDrivers } from '@/features/shared/data/drivers';
-import { Driver } from '@/features/shared/types';
+import { passengers } from '../data';
 
 const ITEMS_PER_PAGE = 5;
 
-export function DriversTable() {
-  // Use our unified drivers data
-  const allDrivers = getAllDrivers();
+export function PassengersTable() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<DriverStatus | 'all'>('all');
-  const [vehicleFilter, setVehicleFilter] = useState<VehicleType | 'all'>('all');
+  const [statusFilter, setStatusFilter] = useState<PassengerStatus | 'all'>('all');
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Filter drivers based on search and filters
-  const filteredDrivers = allDrivers.filter(driver => {
+  // Filter passengers based on search and filters
+  const filteredPassengers = passengers.filter(passenger => {
     const matchesSearch = 
-      driver.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      driver.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      driver.phone.includes(searchQuery) ||
-      driver.licensePlate.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      driver.licenseNumber.toLowerCase().includes(searchQuery.toLowerCase());
+      passenger.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      passenger.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      passenger.phone.includes(searchQuery);
 
-    const matchesStatus = statusFilter === 'all' || driver.status === statusFilter;
-    const matchesVehicle = vehicleFilter === 'all' || driver.vehicleType === vehicleFilter;
+    const matchesStatus = statusFilter === 'all' || passenger.status === statusFilter;
 
-    return matchesSearch && matchesStatus && matchesVehicle;
+    return matchesSearch && matchesStatus;
   });
 
   // Calculate pagination
-  const totalPages = Math.ceil(filteredDrivers.length / ITEMS_PER_PAGE);
-  const paginatedDrivers = filteredDrivers.slice(
+  const totalPages = Math.ceil(filteredPassengers.length / ITEMS_PER_PAGE);
+  const paginatedPassengers = filteredPassengers.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
@@ -80,29 +70,15 @@ export function DriversTable() {
     <Card className="bg-background/95 shadow-sm w-full">
       <CardHeader className="py-1 flex flex-row items-center justify-between">
         <div>
-          <CardTitle className="text-lg">Registered Drivers</CardTitle>
+          <CardTitle className="text-lg">Registered Passengers</CardTitle>
           <CardDescription>
-            Manage driver accounts and monitor their performance
+            Manage passenger accounts and view their trip history
           </CardDescription>
         </div>
         <div className="flex items-center gap-2">
           <Select
-            value={vehicleFilter}
-            onValueChange={(value) => setVehicleFilter(value as VehicleType | 'all')}
-          >
-            <SelectTrigger className="h-9 w-[120px] rounded-md">
-              <SelectValue placeholder="All Vehicles" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Vehicles</SelectItem>
-              <SelectItem value="Car">Car</SelectItem>
-              <SelectItem value="Motorcycle">Motorcycle</SelectItem>
-              <SelectItem value="Tricycle">Tricycle</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select
             value={statusFilter}
-            onValueChange={(value) => setStatusFilter(value as DriverStatus | 'all')}
+            onValueChange={(value) => setStatusFilter(value as PassengerStatus | 'all')}
           >
             <SelectTrigger className="h-9 w-[120px] rounded-md">
               <SelectValue placeholder="All Status" />
@@ -111,14 +87,13 @@ export function DriversTable() {
               <SelectItem value="all">All Status</SelectItem>
               <SelectItem value="Active">Active</SelectItem>
               <SelectItem value="Inactive">Inactive</SelectItem>
-              <SelectItem value="Suspended">Suspended</SelectItem>
             </SelectContent>
           </Select>
           <div className="relative w-64">
             <IconSearch className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
             <Input
               type="search"
-              placeholder="Search drivers..."
+              placeholder="Search passengers..."
               className="w-full rounded-md pl-8"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -131,61 +106,53 @@ export function DriversTable() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Driver</TableHead>
-                <TableHead>Vehicle Info</TableHead>
+                <TableHead>Passenger</TableHead>
                 <TableHead>Contact</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Performance</TableHead>
+                <TableHead>Trips</TableHead>
+                <TableHead>Joined Date</TableHead>
                 <TableHead className="w-[100px]">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {paginatedDrivers.length === 0 ? (
+              {paginatedPassengers.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={6} className="h-24 text-center">
-                    No drivers found.
+                    No passengers found.
                   </TableCell>
                 </TableRow>
               ) : (
-                paginatedDrivers.map((driver) => (
-                  <TableRow key={driver.id}>
+                paginatedPassengers.map((passenger) => (
+                  <TableRow key={passenger.id}>
                     <TableCell className="font-medium">
                       <div className="flex items-center">
-                        {driver.avatar ? (
-                          <Avatar className="mr-2 h-8 w-8">
-                            <AvatarImage src={driver.avatar} alt={driver.name} />
-                            <AvatarFallback>{driver.name.slice(0, 2)}</AvatarFallback>
-                          </Avatar>
-                        ) : (
-                          <div className="bg-primary/10 text-primary mr-2 flex h-8 w-8 items-center justify-center rounded-full">
-                            <IconCar className="h-4 w-4" />
-                          </div>
-                        )}
+                        <div className="bg-primary/10 text-primary mr-2 flex h-7 w-7 items-center justify-center rounded-full">
+                          <IconUser className="h-4 w-4" />
+                        </div>
                         <div>
-                          <div>{driver.name}</div>
-                          <div className="text-sm text-muted-foreground">ID: {driver.id}</div>
+                          <div>{passenger.name}</div>
+                          <div className="text-sm text-muted-foreground">ID: {passenger.id}</div>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="font-medium">{driver.vehicleType}</div>
-                      <div className="text-sm text-muted-foreground">{driver.licensePlate}</div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="font-medium">{driver.phone}</div>
-                      <div className="text-sm text-muted-foreground">{driver.email}</div>
+                      <div className="font-medium">{passenger.phone}</div>
+                      <div className="text-sm text-muted-foreground">{passenger.email}</div>
                     </TableCell>
                     <TableCell>
                       <Badge
-                        variant={driver.status === 'Active' ? 'default' : driver.status === 'Suspended' ? 'destructive' : 'secondary'}
+                        variant={passenger.status === 'Active' ? 'default' : 'secondary'}
                         className="px-3 py-1 rounded-sm"
                       >
-                        {driver.status}
+                        {passenger.status}
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="font-medium">{driver.rating} ⭐</div>
-                      <div className="text-sm text-muted-foreground">{driver.totalTrips} trips</div>
+                      <div className="font-medium">{passenger.totalTrips} trips</div>
+                      <div className="text-sm text-muted-foreground">{passenger.rating} ⭐</div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="font-medium">{passenger.joinedDate}</div>
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
@@ -199,13 +166,13 @@ export function DriversTable() {
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem asChild>
-                            <Link href={`/dashboard/drivers/${driver.id}`}>
+                            <Link href={`/dashboard/passengers/${passenger.id}`}>
                               <IconEye className="mr-2 h-4 w-4" />
                               View Profile
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem asChild>
-                            <Link href={`/dashboard/drivers/${driver.id}/edit`}>
+                            <Link href={`/dashboard/passengers/${passenger.id}/edit`}>
                               <IconEdit className="mr-2 h-4 w-4" />
                               Edit
                             </Link>
@@ -227,7 +194,7 @@ export function DriversTable() {
         {/* Pagination */}
         <div className="flex items-center justify-between py-4 text-sm">
           <div className="text-muted-foreground">
-            Showing {((currentPage - 1) * ITEMS_PER_PAGE) + 1} to {Math.min(currentPage * ITEMS_PER_PAGE, filteredDrivers.length)} of {filteredDrivers.length} drivers
+            Showing {((currentPage - 1) * ITEMS_PER_PAGE) + 1} to {Math.min(currentPage * ITEMS_PER_PAGE, filteredPassengers.length)} of {filteredPassengers.length} passengers
           </div>
           <div className="flex items-center space-x-2">
             <Button

@@ -2,13 +2,13 @@
 
 import React from 'react';
 import PageContainer from '@/components/layout/page-container';
-import { getDriverById } from '@/features/shared/data/drivers';
+import { passengers } from '@/features/passengers/data';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
 import Link from 'next/link';
 import { notFound, useRouter } from 'next/navigation';
 
-export default function DriverProfileLayout({
+export default function PassengerProfileLayout({
   params,
   profile_info,
   trip_stats,
@@ -23,14 +23,14 @@ export default function DriverProfileLayout({
 }) {
   const router = useRouter();
   
-  // Correctly access params using React.use()
-  const { id: driverId } = React.use(params);
-  const driver = getDriverById(driverId);
+  // Access params properly with React.use()
+  const { id: passengerId } = React.use(params);
+  const passenger = passengers.find(p => p.id === passengerId);
 
-  if (!driver) {
+  if (!passenger) {
     notFound();
   }
-  
+
   const handleBack = () => {
     router.back();
   };
@@ -46,12 +46,12 @@ export default function DriverProfileLayout({
                 Back
               </Button>
             </div>
-            <h2 className="text-2xl font-bold tracking-tight mt-2">Driver Profile</h2>
+            <h2 className="text-2xl font-bold tracking-tight mt-2">Passenger Profile</h2>
             <p className="text-muted-foreground">
-              View detailed information about {driver.name}
+              View detailed information about {passenger.name}
             </p>
           </div>
-          <Link href={`/dashboard/drivers/${driver.id}/edit`}>
+          <Link href={`/dashboard/passengers/${passenger.id}/edit`}>
             <Button>
               <Icons.edit className="mr-2 h-4 w-4" />
               Edit Profile
@@ -60,7 +60,7 @@ export default function DriverProfileLayout({
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
-          {/* Driver Information - Left Column */}
+          {/* Passenger Information - Left Column */}
           <div className="lg:col-span-1 space-y-6">
             {profile_info}
             {incident_reports}

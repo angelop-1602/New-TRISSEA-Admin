@@ -1,7 +1,7 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Icons } from '@/components/icons';
 import TodayDate from '@/components/ui/time-today'
-import { drivers } from '@/features/drivers/data';
+import { getDriverById } from '@/features/shared/data/drivers';
 
 // Dummy data for the trips
 const tripStats = {
@@ -10,12 +10,15 @@ const tripStats = {
   cancelledTrips: 2
 };
 
+// This is a server component, so we can directly use params
 export default function TripStats({
   params
 }: {
   params: { id: string };
 }) {
-  const driver = drivers.find(d => d.id === params.id);
+  // For server components, accessing params.id directly is still allowed with a warning
+  // In the future, this will need to be updated when Next.js fully enforces the Promise API
+  const driver = getDriverById(params.id);
   
   if (!driver) {
     return null;
