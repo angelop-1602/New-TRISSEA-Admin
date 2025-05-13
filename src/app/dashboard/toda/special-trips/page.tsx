@@ -133,7 +133,7 @@ export default function GlobalSpecialTripsPage() {
               </Button>
             </div>
             <h2 className='mt-2 text-2xl font-bold tracking-tight'>
-              Global Special Trip Settings
+              Special Trip Settings
             </h2>
             <p className='text-muted-foreground'>
               Configure special trip conditions and fare multipliers for all

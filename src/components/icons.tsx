@@ -45,12 +45,14 @@ import {
   IconEdit,
   IconArrowLeft,
   IconEye,
-  IconEyeOff
+  IconEyeOff,
+  IconUserCog
 } from '@tabler/icons-react';
 
 export type Icon = React.ComponentType<IconProps>;
 
 export const Icons = {
+  usercog: IconUserCog,
   checked: IconCircleCheckFilled,
   routex: IconRouteX,
   wheel: IconSteeringWheel,

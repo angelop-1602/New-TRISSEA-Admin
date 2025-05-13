@@ -104,6 +104,7 @@ export default function AppSidebar() {
                       <SidebarMenuButton
                         tooltip={item.title}
                         isActive={pathname === item.url}
+                        // className='text-lg'
                       >
                         {item.icon && <Icon />}
                         <span>{item.title}</span>
@@ -117,6 +118,7 @@ export default function AppSidebar() {
                             <SidebarMenuSubButton
                               asChild
                               isActive={pathname === subItem.url}
+                              // className='text-lg'
                             >
                               <Link href={subItem.url}>
                                 <span>{subItem.title}</span>
@@ -134,6 +136,7 @@ export default function AppSidebar() {
                     asChild
                     tooltip={item.title}
                     isActive={pathname === item.url}
+                    // className='text-lg'
                   >
                     <Link href={item.url}>
                       <Icon />

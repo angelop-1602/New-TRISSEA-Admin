@@ -60,6 +60,14 @@ export const navItems: NavItem[] = [
     isActive: false,
     shortcut: ['t', 'm'],
     items: [] // Empty array as there are no child items for Dashboard
+  },  
+  {
+    title: 'Operator Management',
+    url: '/dashboard/operators',
+    icon: 'usercog',
+    isActive: false,
+    shortcut: ['o', 'm'],
+    items: [] // Empty array as there are no child items for Dashboard
   }
 ];
 
